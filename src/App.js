@@ -4,7 +4,8 @@ import {
 } from 'react'
 import axios from 'axios'
 import './index.css'
-import { Button, Form, Input, Select, Card, Col, Row, Statistic, notification, Space, Typography, Divider } from 'antd';
+import { Button, Form, Input, Select, Card, Col, Row, Statistic, notification, Space, Typography, Divider, Popover, Drawer, FloatButton } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const App = () => {
 
@@ -16,17 +17,36 @@ const App = () => {
   });
   const { Text, Link, Title } = Typography;
 
-
+  const content = (
+    <div>
+      <p>主要来源于国家辐射环境监测网辐射环境自动监测站自动监测结果，</p>
+      <p>监测点位包括环境质量监测点和核电厂监测点。</p>
+    </div>
+  );
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
+  const [floatOpen, setFloatOpen] = useState(false);
+  const showFloatDrawer = () => {
+    setFloatOpen(true);
+  };
+  const onFloatClose = () => {
+    setFloatOpen(false);
+  };
   const handleSubmit = async (event) => {
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/api/endpoint',
+      const response = await axios.post('https://flask-api-jade.vercel.app/api/endpoint',
         {
           key1: nameValue
         });
       console.log('Data sent successfully:', response.data)
       // 发送get请求
-      const getResponse = await axios.get('http://127.0.0.1:5000/api/endpoint');
+      const getResponse = await axios.get('https://flask-api-jade.vercel.app/api/endpoint');
       console.log('Get response:', getResponse.data);
       // 在这里展示get请求结果
       setGetResponseData(getResponse.data);
@@ -67,7 +87,6 @@ const App = () => {
   const onFinishFailed = () => {
     openNotification()
   }
-
   const [api, contextHolder] = notification.useNotification();
   const openNotification = () => {
     api.open({
@@ -129,6 +148,9 @@ const App = () => {
                   }}
                 // suffix="%"
                 />
+                <Popover content={content} title="数据来源" trigger="hover" placement="bottomRight">
+                  <Text type="secondary">(正常范围：30-200n&nbsp;Gy/h)</Text>
+                </Popover>
               </Card>
               : <div></div>
           }
@@ -141,7 +163,7 @@ const App = () => {
         <Space>
           <Typography>
             <Divider>Made by</Divider>
-            <Text type="secondary">Xinshui</Text>
+            <Text type="secondary" onClick={showDrawer}>Xinshui</Text>
             <Text type="secondary">&nbsp;|&nbsp;Inspired by </Text>
             <Link href="https://sspai.com/post/82619" target="_blank">
               Fairyex
@@ -149,6 +171,19 @@ const App = () => {
           </Typography>
         </Space>
       </Row>
+      <Drawer title="About me" placement="right" onClose={onClose} open={open}>
+        <p>暂时不知道该写些什么，如果你感兴趣的话，不妨到Github给我这个项目一个Star</p>
+        <Link href="https://github.com/Xinshui123/RayDar" target="_blank">
+          Github&nbsp;|&nbsp;RayDar
+        </Link>
+      </Drawer>
+      <Drawer title="About me" placement="right" onClose={onFloatClose} open={floatOpen} placement='left'>
+        <p>暂时不知道该写些什么，如果你感兴趣的话，不妨到Github给我这个项目一个Star</p>
+        <Link href="https://github.com/Xinshui123/RayDar" target="_blank">
+          Github&nbsp;|&nbsp;RayDar
+        </Link>
+      </Drawer>
+      <FloatButton onClick={showFloatDrawer} icon={<QuestionCircleOutlined />} />;
     </div >
   )
 }
