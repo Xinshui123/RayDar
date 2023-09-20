@@ -40,13 +40,13 @@ const App = () => {
   const handleSubmit = async (event) => {
 
     try {
-      const response = await axios.post('https://flask-api-jade.vercel.app/api/endpoint',
+      const response = await axios.post('https://render-flask-og0l.onrender.com/api/endpoint',
         {
           key1: nameValue
         });
       console.log('Data sent successfully:', response.data)
       // 发送get请求
-      const getResponse = await axios.get('https://flask-api-jade.vercel.app/api/endpoint');
+      const getResponse = await axios.get('https://render-flask-og0l.onrender.com/api/endpoint');
       console.log('Get response:', getResponse.data);
       // 在这里展示get请求结果
       setGetResponseData(getResponse.data);
